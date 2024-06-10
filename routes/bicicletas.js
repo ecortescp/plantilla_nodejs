@@ -85,4 +85,37 @@ router.put("/", async (req,res) => {
 }
 })
 
+router.delete("/", async (req,res) =>{
+    const {id} = req.query
+
+    if (id){
+        try {
+            const text = 'DELETE FROM bicicletas WHERE id = $1'
+            const values = [id]
+
+            const result = await db.query(text, values)
+
+            res.json({
+                message: "Bicicleta eliminada con éxito",
+                status: 200
+            })
+            
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({
+            status: 500,
+            message: 'Error interno de servidor'   
+        }) 
+        }
+
+    }
+    else{
+        //Solicitud erroneo
+    res.status(400).json({
+        status: 400,
+        message: "Bad request"
+    })
+    }
+})
+
 export {router}
